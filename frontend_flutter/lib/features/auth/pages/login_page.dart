@@ -17,7 +17,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
-
+  bool _obscurePassword = true;
   void _handleLogin() async {
     setState(() {
       _isLoading = true;
@@ -255,9 +255,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         CustomTextField(
           label: 'Password',
           controller: _passwordController,
-          obscureText: true,
+          obscureText: _obscurePassword,
           hint: 'Masukkan password',
           prefixIcon: const Icon(Icons.lock_outline),
+          suffixIcon: IconButton(
+            icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+            onPressed: () {
+              setState(() {
+                _obscurePassword = !_obscurePassword;
+              });
+            },
+          ),
         ),
         const SizedBox(height: 32),
         
