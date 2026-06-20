@@ -1,0 +1,9 @@
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
+
+linter:
+  rules:
+    avoid_print: false
+    prefer_single_quotes: true
+

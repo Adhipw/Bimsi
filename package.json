@@ -1,0 +1,18 @@
+{
+  "name": "bimsi-ubsi-flutter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bimsi UBSI monorepo for Flutter Web and NestJS REST API.",
+  "scripts": {
+    "dev:backend": "cd backend && npm run start:dev",
+    "lint:backend": "cd backend && npm run lint",
+    "build:backend": "cd backend && npm run build",
+    "flutter:get": "cd frontend_flutter && flutter pub get",
+    "flutter:analyze": "cd frontend_flutter && flutter analyze",
+    "flutter:test": "cd frontend_flutter && flutter test",
+    "flutter:build:web": "cd frontend_flutter && flutter build web",
+    "flutter:build:apk": "cd frontend_flutter && flutter build apk",
+    "build": "npm run build:backend && npm run flutter:build:web",
+    "check": "npm run lint:backend && npm run build:backend && npm run flutter:analyze"
+  }
+}
