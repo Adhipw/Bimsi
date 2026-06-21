@@ -20,14 +20,6 @@ class DashboardHeroCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         color: const Color(0xFF18181B), // Always sleek black for the hero
-        image: DecorationImage(
-          image: const NetworkImage('https://www.transparenttextures.com/patterns/stardust.png'),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha: 0.5),
-            BlendMode.dstIn,
-          ),
-        ),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1), // Gold glow

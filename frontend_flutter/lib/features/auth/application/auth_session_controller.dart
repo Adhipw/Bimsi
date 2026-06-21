@@ -1,12 +1,5 @@
-﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-enum UserRole {
-  mahasiswa,
-  dosen,
-  koordinator,
-  admin,
-  superAdmin,
-}
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/helpers/storage_helper.dart';
 
 class AuthSessionState {
   const AuthSessionState({
@@ -17,13 +10,13 @@ class AuthSessionState {
   });
 
   final bool isAuthenticated;
-  final UserRole? role;
+  final String? role;
   final bool profileCompleted;
   final bool requiresVerification;
 
   AuthSessionState copyWith({
     bool? isAuthenticated,
-    UserRole? role,
+    String? role,
     bool? profileCompleted,
     bool? requiresVerification,
   }) {
@@ -41,7 +34,7 @@ class AuthSessionController extends Notifier<AuthSessionState> {
   AuthSessionState build() => const AuthSessionState();
 
   void login({
-    required UserRole role,
+    required String role,
     bool profileCompleted = true,
     bool requiresVerification = false,
   }) {
@@ -56,7 +49,7 @@ class AuthSessionController extends Notifier<AuthSessionState> {
   void registerStudent() {
     state = const AuthSessionState(
       isAuthenticated: true,
-      role: UserRole.mahasiswa,
+      role: 'mahasiswa',
       profileCompleted: false,
       requiresVerification: true,
     );
@@ -65,7 +58,7 @@ class AuthSessionController extends Notifier<AuthSessionState> {
   void requestLecturerAccount() {
     state = const AuthSessionState(
       isAuthenticated: true,
-      role: UserRole.dosen,
+      role: 'dosen',
       profileCompleted: false,
       requiresVerification: true,
     );
@@ -79,7 +72,8 @@ class AuthSessionController extends Notifier<AuthSessionState> {
     state = state.copyWith(requiresVerification: false);
   }
 
-  void logout() {
+  Future<void> logout() async {
+    await StorageHelper.clearAll();
     state = const AuthSessionState();
   }
 }

@@ -183,14 +183,15 @@ class _MahasiswaDashboardPageState extends ConsumerState<MahasiswaDashboardPage>
                 ),
                 const SizedBox(height: 16),
                 
-                GridView.count(
-                  crossAxisCount: MediaQuery.of(context).size.width > 1200 ? 3 : 
-                                 MediaQuery.of(context).size.width > 800 ? 2 : 1,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
+                GridView(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 400,
+                    mainAxisExtent: 120,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  childAspectRatio: 3,
                   children: [
                     DashboardMenuCard(
                       title: 'Dosen Pembimbing',
@@ -233,6 +234,30 @@ class _MahasiswaDashboardPageState extends ConsumerState<MahasiswaDashboardPage>
                       subtitle: 'Daftar sidang & Turnitin',
                       icon: Icons.gavel_rounded,
                       onTap: () => context.push('/dashboard/mahasiswa/sidang'),
+                    ),
+                    DashboardMenuCard(
+                      title: 'Revisi Sidang',
+                      subtitle: 'Unggah perbaikan sidang',
+                      icon: Icons.edit_document,
+                      onTap: () => context.push('/dashboard/mahasiswa/revisi'),
+                    ),
+                    DashboardMenuCard(
+                      title: 'Diskusi Pembimbing',
+                      subtitle: 'Live chat & komentar',
+                      icon: Icons.chat_bubble_outline_rounded,
+                      onTap: () => context.push('/dashboard/mahasiswa/diskusi'),
+                    ),
+                    DashboardMenuCard(
+                      title: 'Dokumen Resmi',
+                      subtitle: 'Surat tugas & berita acara',
+                      icon: Icons.file_download_outlined,
+                      onTap: () => context.push('/dashboard/mahasiswa/dokumen-resmi'),
+                    ),
+                    DashboardMenuCard(
+                      title: 'Evaluasi Dosen',
+                      subtitle: 'Kuisioner pembimbing',
+                      icon: Icons.star_border_rounded,
+                      onTap: () => context.push('/dashboard/mahasiswa/evaluasi'),
                     ),
                   ],
                 ),

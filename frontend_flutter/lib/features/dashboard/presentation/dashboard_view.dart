@@ -12,12 +12,12 @@ import 'dashboard_controller.dart';
 class DashboardView extends ConsumerWidget {
   const DashboardView({
     super.key,
-    required this.role,
     required this.title,
+    required this.role,
   });
 
-  final UserRole role;
   final String title;
+  final String role;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -28,6 +28,7 @@ use App\Http\Controllers\PusatBantuanController;
 use App\Http\Controllers\CatatanPrivatDosenController;
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
 Route::get('/public/pusat-bantuan', [PusatBantuanController::class, 'indexPublic']);
 Route::get('/public/verifikasi-ttd/{hash}', [PendaftaranSidangController::class, 'verifyTtd']);
@@ -40,6 +41,7 @@ Route::get('/admin/sidang/{id}/generate-berita-acara', [\App\Http\Controllers\Ap
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'profile']);
+    Route::post('/profile/avatar', [\App\Http\Controllers\Api\ProfileController::class, 'uploadAvatar']);
     Route::post('/fcm-token', [FcmTokenController::class, 'updateToken']);
 
     // Chat
@@ -140,6 +142,23 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:super_admin')->group(function () {
         Route::get('/super-admin/audit-logs', [\App\Http\Controllers\Api\AuditLogController::class, 'index']);
+        
+        // Settings
+        Route::get('/settings', [\App\Http\Controllers\Api\SettingController::class, 'index']);
+        Route::put('/settings', [\App\Http\Controllers\Api\SettingController::class, 'update']);
+        
+        // RBAC (Roles & Permissions)
+        Route::get('/roles', [\App\Http\Controllers\Api\RoleController::class, 'getRoles']);
+        Route::post('/roles', [\App\Http\Controllers\Api\RoleController::class, 'createRole']);
+        Route::put('/roles/{id}', [\App\Http\Controllers\Api\RoleController::class, 'updateRole']);
+        Route::delete('/roles/{id}', [\App\Http\Controllers\Api\RoleController::class, 'deleteRole']);
+        Route::get('/permissions', [\App\Http\Controllers\Api\RoleController::class, 'getPermissions']);
+        Route::post('/roles/assign', [\App\Http\Controllers\Api\RoleController::class, 'assignRoleToUser']);
+        
+        // Backup
+        Route::get('/backups', [\App\Http\Controllers\Api\BackupController::class, 'index']);
+        Route::post('/backups/run', [\App\Http\Controllers\Api\BackupController::class, 'runBackup']);
+        Route::get('/backups/download/{file_name}', [\App\Http\Controllers\Api\BackupController::class, 'download']);
     });
 
     // Rute Dosen (Slots & Jadwal)

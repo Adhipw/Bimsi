@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/routes/route_paths.dart';
 import '../../features/auth/application/auth_session_controller.dart';
+import '../../features/auth/services/auth_service.dart';
 
 class AppSidebar extends ConsumerWidget {
   const AppSidebar({super.key});
@@ -30,107 +31,180 @@ class AppSidebar extends ConsumerWidget {
                   label: 'Dashboard',
                   onTap: () => _navigateToDashboard(context, role),
                 ),
-                if (role == UserRole.mahasiswa) ...[
+                _buildNavItem(
+                  context: context,
+                  icon: Icons.person_outline,
+                  label: 'Profil Saya',
+                  onTap: () => context.go('/profile'),
+                ),
+                if (role == 'mahasiswa') ...[
                   _buildNavItem(
                     context: context,
                     icon: Icons.assignment_outlined,
                     label: 'Progress Skripsi',
-                    onTap: () => context.go('/mahasiswa/progress'),
+                    onTap: () => context.go('/dashboard/mahasiswa/progress'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.edit_document,
+                    label: 'Revisi Sidang',
+                    onTap: () => context.go('/dashboard/mahasiswa/revisi'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.chat_bubble_outline_rounded,
+                    label: 'Diskusi Pembimbing',
+                    onTap: () => context.go('/dashboard/mahasiswa/diskusi'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.file_download_outlined,
+                    label: 'Dokumen Resmi',
+                    onTap: () => context.go('/dashboard/mahasiswa/dokumen-resmi'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.star_border_rounded,
+                    label: 'Evaluasi Dosen',
+                    onTap: () => context.go('/dashboard/mahasiswa/evaluasi'),
                   ),
                 ],
-                if (role == UserRole.dosen) ...[
+                if (role == 'dosen') ...[
                   _buildNavItem(
                     context: context,
                     icon: Icons.people_outline,
                     label: 'Mahasiswa Bimbingan',
                     onTap: () => context.go('/dashboard/dosen/bimbingan'),
                   ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.grading_rounded,
+                    label: 'Penilaian Sidang',
+                    onTap: () => context.go('/dashboard/dosen/penilaian-sidang'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.draw_rounded,
+                    label: 'Validasi Berita Acara',
+                    onTap: () => context.go('/dashboard/dosen/validasi-berita-acara'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.payments_outlined,
+                    label: 'Rekap Honorarium',
+                    onTap: () => context.go('/dashboard/dosen/rekap-honorarium'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.flight_takeoff_rounded,
+                    label: 'Pengajuan Cuti',
+                    onTap: () => context.go('/dashboard/dosen/delegasi-cuti'),
+                  ),
                 ],
-                if (role == UserRole.koordinator) ...[
+                if (role == 'kaprodi' || role == 'koordinator') ...[
                   _buildNavItem(
                     context: context,
                     icon: Icons.monitor_outlined,
                     label: 'Monitoring Progress',
-                    onTap: () => context.go('/kaprodi/monitoring'),
+                    onTap: () => context.go('/dashboard/kaprodi/monitoring-progress'),
                   ),
                   _buildNavItem(
                     context: context,
                     icon: Icons.summarize_outlined,
                     label: 'Laporan',
-                    onTap: () => context.go('/kaprodi/laporan'),
+                    onTap: () => context.go('/dashboard/kaprodi/laporan'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.insights_rounded,
+                    label: 'Analytics & Statistik',
+                    onTap: () => context.go('/dashboard/kaprodi/analytics'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.rule_folder_rounded,
+                    label: 'Approval Perubahan',
+                    onTap: () => context.go('/dashboard/kaprodi/approval-perubahan'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.document_scanner_rounded,
+                    label: 'Generate SK',
+                    onTap: () => context.go('/dashboard/kaprodi/generate-sk'),
                   ),
                 ],
-                if (role == UserRole.admin || role == UserRole.superAdmin) ...[
+                if (role == 'admin' || role == 'super_admin' || role == 'superAdmin') ...[
                   const Padding(
                     padding: EdgeInsets.only(left: 24, top: 16, bottom: 8),
                     child: Text('DATA MASTER', style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold)),
                   ),
                   _buildNavItem(
                     context: context,
-                    icon: Icons.school_outlined,
-                    label: 'Program Studi',
-                    onTap: () => context.push('/dashboard/admin/master-list?type=program-studi'),
+                    icon: Icons.storage_outlined,
+                    label: 'Kelola Data Master',
+                    onTap: () => context.go('/dashboard/admin/master'),
                   ),
-                  ExpansionTile(
-                    leading: const Icon(Icons.settings),
-                    title: const Text('Admin Akademik'),
-                    initiallyExpanded: true,
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.schedule),
-                        title: const Text('Plotting Jadwal Sidang'),
-                        selected: currentRoute == '/admin/jadwal',
-                        onTap: () => context.go('/admin/jadwal'),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.plagiarism),
-                        title: const Text('Verifikasi Turnitin'),
-                        selected: currentRoute == '/admin/turnitin',
-                        onTap: () => context.go('/admin/turnitin'),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.library_books),
-                        title: const Text('Digital Library'),
-                        selected: currentRoute == '/admin/repository',
-                        onTap: () => context.go('/admin/repository'),
-                      ),
-                    ],
-                  ),
+                  if (role == 'super_admin' || role == 'superAdmin') ...[
+                    _buildNavItem(
+                      context: context,
+                      icon: Icons.settings_outlined,
+                      label: 'Pengaturan Sistem',
+                      onTap: () => context.go('/dashboard/super-admin/settings'),
+                    ),
+                    _buildNavItem(
+                      context: context,
+                      icon: Icons.admin_panel_settings_outlined,
+                      label: 'Role & Permissions',
+                      onTap: () => context.go('/dashboard/super-admin/roles'),
+                    ),
+                    _buildNavItem(
+                      context: context,
+                      icon: Icons.backup_outlined,
+                      label: 'Backup & Logs',
+                      onTap: () => context.go('/dashboard/super-admin/backup'),
+                    ),
+                    _buildNavItem(
+                      context: context,
+                      icon: Icons.sync_alt_rounded,
+                      label: 'API Integrations',
+                      onTap: () => context.go('/dashboard/super-admin/api-integrations'),
+                    ),
+                    _buildNavItem(
+                      context: context,
+                      icon: Icons.bug_report_rounded,
+                      label: 'Bug Reports',
+                      onTap: () => context.go('/dashboard/super-admin/bug-reports'),
+                    ),
+                  ],
                   _buildNavItem(
                     context: context,
-                    icon: Icons.date_range_outlined,
-                    label: 'Tahun Akademik',
-                    onTap: () => context.push('/dashboard/admin/master-list?type=tahun-akademik'),
-                  ),
-                  _buildNavItem(
-                    context: context,
-                    icon: Icons.calendar_today_outlined,
-                    label: 'Semester',
-                    onTap: () => context.push('/dashboard/admin/master-list?type=semester'),
-                  ),
-                  _buildNavItem(
-                    context: context,
-                    icon: Icons.class_outlined,
-                    label: 'Kelas',
-                    onTap: () => context.push('/dashboard/admin/master-list?type=kelas'),
-                  ),
-                  _buildNavItem(
-                    context: context,
-                    icon: Icons.people_outlined,
-                    label: 'User',
-                    onTap: () => context.push('/dashboard/admin/master-list?type=user'),
-                  ),
-                  _buildNavItem(
-                    context: context,
-                    icon: Icons.assignment_ind_outlined,
-                    label: 'Dosen',
-                    onTap: () => context.push('/dashboard/admin/master-list?type=dosen'),
+                    icon: Icons.security_outlined,
+                    label: 'Audit Logs',
+                    onTap: () => context.go('/dashboard/admin/audit-logs'),
                   ),
                   _buildNavItem(
                     context: context,
                     icon: Icons.person_outlined,
                     label: 'Mahasiswa',
                     onTap: () => context.push('/dashboard/admin/master-list?type=mahasiswa'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.group_work_rounded,
+                    label: 'Manajemen Kuota',
+                    onTap: () => context.go('/dashboard/admin/kuota-pembimbing'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.campaign_rounded,
+                    label: 'Broadcast',
+                    onTap: () => context.go('/dashboard/admin/broadcast-pengumuman'),
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    icon: Icons.task_rounded,
+                    label: 'Penerbitan Surat',
+                    onTap: () => context.go('/dashboard/admin/penerbitan-surat'),
                   ),
                 ],
               ],
@@ -142,9 +216,12 @@ class AppSidebar extends ConsumerWidget {
             icon: Icons.logout,
             label: 'Logout',
             isDestructive: true,
-            onTap: () {
-              ref.read(authSessionControllerProvider.notifier).logout();
-              context.go('/login');
+            onTap: () async {
+              await ref.read(authServiceProvider).logout();
+              await ref.read(authSessionControllerProvider.notifier).logout();
+              if (context.mounted) {
+                context.go('/login');
+              }
             },
           ),
           const SizedBox(height: 16),
@@ -153,23 +230,25 @@ class AppSidebar extends ConsumerWidget {
     );
   }
 
-  void _navigateToDashboard(BuildContext context, UserRole? role) {
+  void _navigateToDashboard(BuildContext context, String? role) {
     if (role == null) return;
     switch (role) {
-      case UserRole.mahasiswa:
-        context.go('/mahasiswa');
+      case 'mahasiswa':
+        context.go(RoutePaths.dashboardMahasiswa);
         break;
-      case UserRole.dosen:
-        context.go('/dosen');
+      case 'dosen':
+        context.go(RoutePaths.dashboardDosen);
         break;
-      case UserRole.koordinator:
-        context.go('/kaprodi');
+      case 'kaprodi':
+      case 'koordinator':
+        context.go(RoutePaths.dashboardKoordinator);
         break;
-      case UserRole.admin:
-        context.go('/admin');
+      case 'admin':
+        context.go(RoutePaths.dashboardAdmin);
         break;
-      case UserRole.superAdmin:
-        context.go('/super-admin');
+      case 'super_admin':
+      case 'superAdmin':
+        context.go(RoutePaths.dashboardSuperAdmin);
         break;
     }
   }

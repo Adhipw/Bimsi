@@ -1,12 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'route_paths.dart';
+import '../../features/auth/application/auth_session_controller.dart';
 import '../../features/auth/pages/login_page.dart';
 import '../../features/dashboard/pages/dashboard_router_page.dart';
+import '../../features/profile/pages/profile_page.dart';
 import '../../features/mahasiswa/pages/mahasiswa_dashboard_page.dart';
 import '../../features/dosen/pages/dosen_dashboard_page.dart';
 import '../../features/kaprodi/pages/kaprodi_dashboard_page.dart';
 import '../../features/admin/pages/admin_dashboard_page.dart';
 import '../../features/super_admin/pages/super_admin_dashboard_page.dart';
+import '../../features/super_admin/pages/system_settings_page.dart';
+import '../../features/super_admin/pages/role_management_page.dart';
+import '../../features/super_admin/pages/backup_page.dart';
+import '../../features/super_admin/pages/super_admin_audit_log_page.dart';
+import '../../features/super_admin/pages/super_admin_api_integrations_page.dart';
+import '../../features/super_admin/pages/super_admin_bug_reports_page.dart';
 import '../../features/admin/pages/master_data_menu_page.dart';
 import '../../features/admin/pages/master_data_list_page.dart';
 import '../../features/admin/pages/master_data_form_page.dart';
@@ -18,6 +27,10 @@ import '../../features/kaprodi/pages/kaprodi_detail_pengajuan_judul_page.dart';
 import '../../features/kaprodi/pages/kaprodi_tentukan_pembimbing_page.dart';
 import '../../features/kaprodi/pages/kaprodi_penetapan_penguji_page.dart';
 import '../../features/kaprodi/pages/kaprodi_monitoring_progress_page.dart';
+import '../../features/kaprodi/pages/kaprodi_analytics_page.dart';
+import '../../features/kaprodi/pages/kaprodi_approval_perubahan_page.dart';
+import '../../features/kaprodi/pages/kaprodi_generate_sk_page.dart';
+import '../../features/kaprodi/pages/kaprodi_laporan_page.dart';
 import '../../features/mahasiswa/pages/mahasiswa_pembimbing_page.dart';
 import '../../features/dosen/pages/dosen_mahasiswa_bimbingan_page.dart';
 import '../../features/dosen/pages/dosen_slot_bimbingan_page.dart';
@@ -32,9 +45,21 @@ import '../../features/mahasiswa/pages/mahasiswa_upload_dokumen_page.dart';
 import '../../features/dosen/pages/dosen_review_dokumen_page.dart';
 import '../../features/mahasiswa/pages/mahasiswa_progress_page.dart';
 import '../../features/dosen/pages/dosen_progress_mahasiswa_page.dart';
+import '../../features/dosen/pages/dosen_penilaian_sidang_page.dart';
+import '../../features/dosen/pages/dosen_validasi_berita_acara_page.dart';
+import '../../features/dosen/pages/dosen_rekap_honorarium_page.dart';
+import '../../features/dosen/pages/dosen_delegasi_cuti_page.dart';
 import '../../features/admin/pages/admin_plotting_jadwal_page.dart';
 import '../../features/admin/pages/admin_turnitin_page.dart';
 import '../../features/admin/pages/repository_public_page.dart';
+import '../../features/admin/pages/admin_manajemen_kuota_page.dart';
+import '../../features/admin/pages/admin_broadcast_pengumuman_page.dart';
+import '../../features/admin/pages/admin_penerbitan_surat_page.dart';
+import '../../features/mahasiswa/pages/mahasiswa_pendaftaran_sidang_page.dart';
+import '../../features/mahasiswa/pages/mahasiswa_revisi_sidang_page.dart';
+import '../../features/mahasiswa/pages/mahasiswa_diskusi_page.dart';
+import '../../features/mahasiswa/pages/mahasiswa_dokumen_resmi_page.dart';
+import '../../features/mahasiswa/pages/mahasiswa_evaluasi_pembimbing_page.dart';
 import '../helpers/storage_helper.dart';
  
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -47,6 +72,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (token == null && !isLoggingIn) return '/login';
       if (token != null && isLoggingIn) return '/dashboard';
       
+      if (token != null) {
+        final sessionRole = ref.read(authSessionControllerProvider).role;
+        if (sessionRole == null) {
+          final storedRole = await StorageHelper.getRole();
+          if (storedRole != null) {
+            // We must schedule this after the build phase
+            Future.microtask(() {
+              ref.read(authSessionControllerProvider.notifier).login(role: storedRole);
+            });
+          }
+        }
+      }
+      
       return null;
     },
     routes: [
@@ -54,6 +92,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/login',
         name: 'login',
         builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: RoutePaths.profile,
+        builder: (context, state) => const ProfilePage(),
       ),
       GoRoute(
         path: '/dashboard',
@@ -173,6 +215,31 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'mahasiswa_progress',
         builder: (context, state) => const MahasiswaProgressPage(),
       ),
+      GoRoute(
+        path: '/dashboard/mahasiswa/sidang',
+        name: 'mahasiswa_sidang',
+        builder: (context, state) => const MahasiswaPendaftaranSidangPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/mahasiswa/revisi',
+        name: 'mahasiswa_revisi',
+        builder: (context, state) => const MahasiswaRevisiSidangPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/mahasiswa/diskusi',
+        name: 'mahasiswa_diskusi',
+        builder: (context, state) => const MahasiswaDiskusiPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/mahasiswa/dokumen-resmi',
+        name: 'mahasiswa_dokumen_resmi',
+        builder: (context, state) => const MahasiswaDokumenResmiPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/mahasiswa/evaluasi',
+        name: 'mahasiswa_evaluasi',
+        builder: (context, state) => const MahasiswaEvaluasiPembimbingPage(),
+      ),
       // Kaprodi routes
       GoRoute(
         path: '/dashboard/kaprodi/pengajuan',
@@ -201,6 +268,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/dashboard/kaprodi/monitoring-progress',
         name: 'kaprodi_monitoring_progress',
         builder: (context, state) => const KaprodiMonitoringProgressPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/kaprodi/laporan',
+        name: 'kaprodi_laporan',
+        builder: (context, state) => const KaprodiLaporanPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/kaprodi/analytics',
+        name: 'kaprodi_analytics',
+        builder: (context, state) => const KaprodiAnalyticsPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/kaprodi/approval-perubahan',
+        name: 'kaprodi_approval_perubahan',
+        builder: (context, state) => const KaprodiApprovalPerubahanPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/kaprodi/generate-sk',
+        name: 'kaprodi_generate_sk',
+        builder: (context, state) => const KaprodiGenerateSkPage(),
       ),
       // Dosen routes
       GoRoute(
@@ -247,6 +334,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return DosenProgressMahasiswaPage(pengajuanJudulId: id, namaMahasiswa: nama);
         },
       ),
+      GoRoute(
+        path: '/dashboard/dosen/penilaian-sidang',
+        name: 'dosen_penilaian_sidang',
+        builder: (context, state) => const DosenPenilaianSidangPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/dosen/validasi-berita-acara',
+        name: 'dosen_validasi_berita_acara',
+        builder: (context, state) => const DosenValidasiBeritaAcaraPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/dosen/rekap-honorarium',
+        name: 'dosen_rekap_honorarium',
+        builder: (context, state) => const DosenRekapHonorariumPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/dosen/delegasi-cuti',
+        name: 'dosen_delegasi_cuti',
+        builder: (context, state) => const DosenDelegasiCutiPage(),
+      ),
       // Admin Akademik routes
       GoRoute(
         path: '/admin/jadwal',
@@ -262,6 +369,52 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/admin/repository',
         name: 'admin_repository',
         builder: (context, state) => const RepositoryPublicPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/admin/kuota-pembimbing',
+        name: 'admin_manajemen_kuota',
+        builder: (context, state) => const AdminManajemenKuotaPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/admin/broadcast-pengumuman',
+        name: 'admin_broadcast_pengumuman',
+        builder: (context, state) => const AdminBroadcastPengumumanPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/admin/penerbitan-surat',
+        name: 'admin_penerbitan_surat',
+        builder: (context, state) => const AdminPenerbitanSuratPage(),
+      ),
+      // Super Admin routes
+      GoRoute(
+        path: '/dashboard/admin/audit-logs',
+        name: 'admin_audit_logs',
+        builder: (context, state) => const SuperAdminAuditLogPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/super-admin/settings',
+        name: 'super_admin_settings',
+        builder: (context, state) => const SystemSettingsPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/super-admin/roles',
+        name: 'super_admin_roles',
+        builder: (context, state) => const RoleManagementPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/super-admin/backup',
+        name: 'super_admin_backup',
+        builder: (context, state) => const BackupPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/super-admin/api-integrations',
+        name: 'super_admin_api_integrations',
+        builder: (context, state) => const SuperAdminApiIntegrationsPage(),
+      ),
+      GoRoute(
+        path: '/dashboard/super-admin/bug-reports',
+        name: 'super_admin_bug_reports',
+        builder: (context, state) => const SuperAdminBugReportsPage(),
       ),
     ],
   );

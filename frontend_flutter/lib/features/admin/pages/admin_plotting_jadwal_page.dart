@@ -72,6 +72,16 @@ class _AdminPlottingJadwalPageState extends ConsumerState<AdminPlottingJadwalPag
       return;
     }
 
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final selectedDate = _selectedDates[sidangId]!;
+    final selected = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    
+    if (selected.isBefore(today)) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pilihan tidak valid: Tanggal plotting tidak boleh di masa lalu.'), backgroundColor: Colors.redAccent));
+      return;
+    }
+
     setState(() => _isLoading = true);
     try {
       final service = ref.read(adminAkademikServiceProvider);

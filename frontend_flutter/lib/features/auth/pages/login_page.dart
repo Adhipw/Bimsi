@@ -5,6 +5,7 @@ import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../core/utils/snackbar_utils.dart';
 import '../services/auth_service.dart';
+import '../application/auth_session_controller.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -25,9 +26,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     try {
       final authService = ref.read(authServiceProvider);
-      await authService.login(_emailController.text, _passwordController.text);
+      final user = await authService.login(_emailController.text, _passwordController.text);
       
       if (mounted) {
+        ref.read(authSessionControllerProvider.notifier).login(role: user.role);
         context.go('/dashboard');
       }
     } catch (e) {
@@ -130,14 +132,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             child: Container(
               decoration: BoxDecoration(
                 color: const Color(0xFF18181B), // Always dark and elegant
-                image: DecorationImage(
-                  image: const NetworkImage('https://www.transparenttextures.com/patterns/cubes.png'),
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    Colors.black.withValues(alpha: 0.1),
-                    BlendMode.dstIn,
-                  ),
-                ),
               ),
               padding: const EdgeInsets.all(48.0),
               child: Column(

@@ -1,4 +1,4 @@
-﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../auth/application/auth_session_controller.dart';
@@ -24,23 +24,25 @@ final getDashboardSummaryUseCaseProvider = Provider<GetDashboardSummaryUseCase>(
   return GetDashboardSummaryUseCase(ref.watch(dashboardRepositoryProvider));
 });
 
-final dashboardSummaryProvider = FutureProvider.family<DashboardSummary, UserRole>((ref, role) async {
+final dashboardSummaryProvider = FutureProvider.family<DashboardSummary, String>((ref, role) async {
   final useCase = ref.watch(getDashboardSummaryUseCaseProvider);
   return useCase(_rolePath(role));
 });
 
-String _rolePath(UserRole role) {
+String _rolePath(String role) {
   switch (role) {
-    case UserRole.mahasiswa:
+    case 'mahasiswa':
       return 'mahasiswa';
-    case UserRole.dosen:
+    case 'dosen':
       return 'dosen';
-    case UserRole.koordinator:
+    case 'koordinator':
       return 'koordinator';
-    case UserRole.admin:
+    case 'admin':
       return 'admin';
-    case UserRole.superAdmin:
+    case 'superAdmin':
       return 'super_admin';
+    default:
+      return 'mahasiswa';
   }
 }
 

@@ -13,7 +13,7 @@ class RoleDashboardScreen extends ConsumerWidget {
     required this.title,
   });
 
-  final UserRole role;
+  final String role;
   final String title;
 
   @override
@@ -44,19 +44,20 @@ class RoleDashboardScreen extends ConsumerWidget {
     );
   }
 
-  String _roleLabel(UserRole role) {
+  String _roleLabel(String role) {
     switch (role) {
-      case UserRole.mahasiswa:
+      case 'mahasiswa':
         return 'Mahasiswa';
-      case UserRole.dosen:
+      case 'dosen':
         return 'Dosen';
-      case UserRole.koordinator:
-        return 'Koordinator';
-      case UserRole.admin:
-        return 'Admin';
-      case UserRole.superAdmin:
+      case 'koordinator':
+        return 'Koordinator / Kaprodi';
+      case 'admin':
+        return 'Admin Akademik';
+      case 'superAdmin':
         return 'Super Admin';
+      default:
+        return 'Role Tidak Dikenal';
     }
   }
 }
-

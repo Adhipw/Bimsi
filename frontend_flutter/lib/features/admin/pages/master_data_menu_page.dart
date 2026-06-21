@@ -1,5 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../shared/layouts/responsive_scaffold.dart';
 
 class MasterDataMenuPage extends StatelessWidget {
   const MasterDataMenuPage({super.key});
@@ -58,14 +59,8 @@ class MasterDataMenuPage extends StatelessWidget {
       },
     ];
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        title: const Text('Kelola Data Master', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-        backgroundColor: const Color(0xFF0056A6),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-      ),
+    return ResponsiveScaffold(
+      title: 'Kelola Data Master',
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(

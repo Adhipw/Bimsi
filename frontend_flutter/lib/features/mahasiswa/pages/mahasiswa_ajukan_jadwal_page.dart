@@ -106,6 +106,17 @@ class _MahasiswaAjukanJadwalPageState extends ConsumerState<MahasiswaAjukanJadwa
       );
       return;
     }
+
+    // Past date validation
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final selected = DateTime(_selectedDate!.year, _selectedDate!.month, _selectedDate!.day);
+    if (selected.isBefore(today)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Pilihan tidak valid: Tanggal bimbingan tidak boleh di masa lalu.'), backgroundColor: Colors.redAccent),
+      );
+      return;
+    }
  
     setState(() {
       _isSaving = true;

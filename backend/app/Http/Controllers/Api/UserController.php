@@ -30,9 +30,28 @@ class UserController extends Controller
 
         $user = User::create($validated);
 
+        // Assign role if you are using spatie/laravel-permission (Opsional, asumsikan sudah di-handle atau cukup kolom role)
+        if (method_exists($user, 'assignRole')) {
+            $user->assignRole($validated['role']);
+        }
+
+        // Generate OTP 6 digit
+        $otpCode = (string) random_int(100000, 999999);
+        $user->otp_code = $otpCode;
+        $user->otp_expires_at = now()->addMinutes(10);
+        $user->save();
+
+        // Send OTP via Email
+        try {
+            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\OtpMail($otpCode));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send OTP email: ' . $e->getMessage());
+            // Lanjut berjalan meskipun email gagal terkirim (agar user tetap terbuat)
+        }
+
         return response()->json([
             'status' => 'success',
-            'message' => 'User berhasil dibuat.',
+            'message' => 'User berhasil dibuat dan OTP telah dikirim ke email.',
             'data' => $user
         ], 201);
     }

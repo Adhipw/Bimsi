@@ -161,25 +161,53 @@ class _KaprodiDashboardPageState extends ConsumerState<KaprodiDashboardPage> {
                 ),
               ),
               
-              DashboardMenuCard(
-                title: 'Penentuan Pembimbing',
-                subtitle: 'Alokasikan pembimbing untuk judul yang disetujui.',
-                icon: Icons.supervisor_account_rounded,
-                onTap: () => context.push('/dashboard/kaprodi/pembimbing'),
-              ),
-              
-              DashboardMenuCard(
-                title: 'Monitoring Progress',
-                subtitle: 'Pantau kemajuan skripsi seluruh mahasiswa.',
-                icon: Icons.bar_chart_rounded,
-                onTap: () => context.pushNamed('kaprodi_monitoring_progress'),
-              ),
-              
-              DashboardMenuCard(
-                title: 'Penetapan Dosen Penguji',
-                subtitle: 'Tetapkan penguji untuk sidang mahasiswa.',
-                icon: Icons.gavel_rounded,
-                onTap: () => context.push('/dashboard/kaprodi/penguji'),
+              GridView(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 400,
+                  mainAxisExtent: 120,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  DashboardMenuCard(
+                    title: 'Penentuan Pembimbing',
+                    subtitle: 'Alokasikan pembimbing untuk judul yang disetujui.',
+                    icon: Icons.supervisor_account_rounded,
+                    onTap: () => context.push('/dashboard/kaprodi/pembimbing'),
+                  ),
+                  DashboardMenuCard(
+                    title: 'Monitoring Progress',
+                    subtitle: 'Pantau kemajuan skripsi seluruh mahasiswa.',
+                    icon: Icons.bar_chart_rounded,
+                    onTap: () => context.pushNamed('kaprodi_monitoring_progress'),
+                  ),
+                  DashboardMenuCard(
+                    title: 'Penetapan Dosen Penguji',
+                    subtitle: 'Tetapkan penguji untuk sidang mahasiswa.',
+                    icon: Icons.gavel_rounded,
+                    onTap: () => context.push('/dashboard/kaprodi/penguji'),
+                  ),
+                  DashboardMenuCard(
+                    title: 'Analytics & Statistik',
+                    subtitle: 'Distribusi beban & kelulusan',
+                    icon: Icons.insights_rounded,
+                    onTap: () => context.push('/dashboard/kaprodi/analytics'),
+                  ),
+                  DashboardMenuCard(
+                    title: 'Approval Perubahan',
+                    subtitle: 'Persetujuan ubah judul/dosen',
+                    icon: Icons.rule_folder_rounded,
+                    onTap: () => context.push('/dashboard/kaprodi/approval-perubahan'),
+                  ),
+                  DashboardMenuCard(
+                    title: 'Generate SK Penugasan',
+                    subtitle: 'Cetak dokumen otomatis ke PDF',
+                    icon: Icons.document_scanner_rounded,
+                    onTap: () => context.push('/dashboard/kaprodi/generate-sk'),
+                  ),
+                ],
               ),
             ],
           ),

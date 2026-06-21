@@ -31,13 +31,15 @@ class DosenDashboardPage extends ConsumerWidget {
               style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            GridView.count(
-              crossAxisCount: crossAxisCount,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+            GridView(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 300,
+                mainAxisExtent: 120,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 2.5,
               children: const [
                 KpiGridCard(
                   title: 'Total Bimbingan',
@@ -71,13 +73,15 @@ class DosenDashboardPage extends ConsumerWidget {
               style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            GridView.count(
-              crossAxisCount: crossAxisCount > 2 ? 3 : (crossAxisCount == 2 ? 2 : 1),
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+            GridView(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 400,
+                mainAxisExtent: 120,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 3,
               children: [
                 DashboardMenuCard(
                   title: 'Mahasiswa Bimbingan',
@@ -108,6 +112,30 @@ class DosenDashboardPage extends ConsumerWidget {
                   subtitle: 'Cek draft proposal & skripsi',
                   icon: Icons.folder_shared_rounded,
                   onTap: () => context.push('/dashboard/dosen/dokumen'),
+                ),
+                DashboardMenuCard(
+                  title: 'Penilaian Sidang',
+                  subtitle: 'Input nilai sidang (Rubrik)',
+                  icon: Icons.grading_rounded,
+                  onTap: () => context.push('/dashboard/dosen/penilaian-sidang'),
+                ),
+                DashboardMenuCard(
+                  title: 'Validasi Berita Acara',
+                  subtitle: 'Tanda tangan digital',
+                  icon: Icons.draw_rounded,
+                  onTap: () => context.push('/dashboard/dosen/validasi-berita-acara'),
+                ),
+                DashboardMenuCard(
+                  title: 'Rekap Honorarium',
+                  subtitle: 'Estimasi beban & honor',
+                  icon: Icons.payments_outlined,
+                  onTap: () => context.push('/dashboard/dosen/rekap-honorarium'),
+                ),
+                DashboardMenuCard(
+                  title: 'Pengajuan Cuti',
+                  subtitle: 'Delegasi bimbingan sementara',
+                  icon: Icons.flight_takeoff_rounded,
+                  onTap: () => context.push('/dashboard/dosen/delegasi-cuti'),
                 ),
               ],
             ),

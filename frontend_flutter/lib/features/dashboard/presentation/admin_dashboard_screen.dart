@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../auth/application/auth_session_controller.dart';
@@ -10,9 +10,8 @@ class AdminDashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const DashboardView(
-      role: UserRole.admin,
       title: 'Dashboard Admin',
+      role: 'admin',
     );
   }
 }
-

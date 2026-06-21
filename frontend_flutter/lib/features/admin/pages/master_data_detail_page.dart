@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/master_service.dart';
 import '../models/program_studi_model.dart';
@@ -8,6 +8,7 @@ import '../models/kelas_model.dart';
 import '../models/dosen_model.dart';
 import '../models/mahasiswa_model.dart';
 import '../../auth/models/user_model.dart';
+import '../../../shared/layouts/responsive_scaffold.dart';
 
 class MasterDataDetailPage extends ConsumerStatefulWidget {
   final String type;
@@ -172,14 +173,8 @@ class _MasterDataDetailPageState extends ConsumerState<MasterDataDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        title: Text(_title, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-        backgroundColor: const Color(0xFF0056A6),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-      ),
+    return ResponsiveScaffold(
+      title: _title,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _item == null

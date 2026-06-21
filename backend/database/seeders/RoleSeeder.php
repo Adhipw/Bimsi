@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Role;
-use App\Models\Permission;
-use App\Models\RolePermission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\DB;
 
 class RoleSeeder extends Seeder
 {
@@ -17,7 +17,7 @@ class RoleSeeder extends Seeder
         $roles = ['super_admin', 'admin', 'kaprodi', 'dosen', 'mahasiswa'];
 
         foreach ($roles as $roleName) {
-            Role::firstOrCreate(['name' => $roleName]);
+            Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
         }
 
         $permissions = [
@@ -35,69 +35,27 @@ class RoleSeeder extends Seeder
         ];
 
         foreach ($permissions as $permName) {
-            Permission::firstOrCreate(['name' => $permName]);
+            Permission::firstOrCreate(['name' => $permName, 'guard_name' => 'web']);
         }
 
         // Assign all permissions to super_admin
         $superAdmin = Role::where('name', 'super_admin')->first();
-        $allPermissions = Permission::all();
-        foreach ($allPermissions as $perm) {
-            RolePermission::firstOrCreate([
-                'role_id' => $superAdmin->id,
-                'permission_id' => $perm->id,
-            ]);
-        }
+        $superAdmin->syncPermissions(Permission::all());
 
         // Assign some permissions to admin
         $admin = Role::where('name', 'admin')->first();
-        $adminPerms = ['manage_users', 'manage_master_data', 'view_reports'];
-        foreach ($adminPerms as $permName) {
-            $perm = Permission::where('name', $permName)->first();
-            if ($perm) {
-                RolePermission::firstOrCreate([
-                    'role_id' => $admin->id,
-                    'permission_id' => $perm->id,
-                ]);
-            }
-        }
+        $admin->syncPermissions(['manage_users', 'manage_master_data', 'view_reports']);
 
         // Assign permissions to kaprodi
         $kaprodi = Role::where('name', 'kaprodi')->first();
-        $kaprodiPerms = ['approve_judul', 'assign_pembimbing', 'view_reports'];
-        foreach ($kaprodiPerms as $permName) {
-            $perm = Permission::where('name', $permName)->first();
-            if ($perm) {
-                RolePermission::firstOrCreate([
-                    'role_id' => $kaprodi->id,
-                    'permission_id' => $perm->id,
-                ]);
-            }
-        }
+        $kaprodi->syncPermissions(['approve_judul', 'assign_pembimbing', 'view_reports']);
 
         // Assign permissions to dosen
         $dosen = Role::where('name', 'dosen')->first();
-        $dosenPerms = ['manage_slot_bimbingan', 'approve_jadwal_bimbingan', 'input_riwayat_bimbingan', 'review_dokumen'];
-        foreach ($dosenPerms as $permName) {
-            $perm = Permission::where('name', $permName)->first();
-            if ($perm) {
-                RolePermission::firstOrCreate([
-                    'role_id' => $dosen->id,
-                    'permission_id' => $perm->id,
-                ]);
-            }
-        }
+        $dosen->syncPermissions(['manage_slot_bimbingan', 'approve_jadwal_bimbingan', 'input_riwayat_bimbingan', 'review_dokumen']);
 
         // Assign permissions to mahasiswa
         $mahasiswa = Role::where('name', 'mahasiswa')->first();
-        $mahasiswaPerms = ['upload_dokumen'];
-        foreach ($mahasiswaPerms as $permName) {
-            $perm = Permission::where('name', $permName)->first();
-            if ($perm) {
-                RolePermission::firstOrCreate([
-                    'role_id' => $mahasiswa->id,
-                    'permission_id' => $perm->id,
-                ]);
-            }
-        }
+        $mahasiswa->syncPermissions(['upload_dokumen']);
     }
 }

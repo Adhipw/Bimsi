@@ -38,13 +38,15 @@ class KaprodiAnalyticsWidget extends ConsumerWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            GridView.count(
-              crossAxisCount: crossAxisCount,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+            GridView(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 300,
+                mainAxisExtent: 120,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 2.5,
               children: [
                 KpiGridCard(
                   title: 'Menunggu Persetujuan',

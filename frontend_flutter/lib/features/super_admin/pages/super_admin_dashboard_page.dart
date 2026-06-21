@@ -32,13 +32,15 @@ class SuperAdminDashboardPage extends ConsumerWidget {
               style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            GridView.count(
-              crossAxisCount: crossAxisCount,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+            GridView(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 300,
+                mainAxisExtent: 120,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 2.5,
               children: const [
                 KpiGridCard(
                   title: 'Total Mahasiswa',
@@ -46,6 +48,7 @@ class SuperAdminDashboardPage extends ConsumerWidget {
                   icon: Icons.people,
                   color: Colors.blue,
                 ),
+
                 KpiGridCard(
                   title: 'Total Dosen',
                   value: '84',
@@ -72,31 +75,45 @@ class SuperAdminDashboardPage extends ConsumerWidget {
               style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            GridView.count(
-              crossAxisCount: crossAxisCount > 2 ? 3 : (crossAxisCount == 2 ? 2 : 1),
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+            GridView(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 400,
+                mainAxisExtent: 120,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 3,
               children: [
                 DashboardMenuCard(
-                  title: 'Kelola Data Master',
-                  subtitle: 'CRUD Prodi, Kelas, Dosen, dll.',
-                  icon: Icons.storage_rounded,
-                  onTap: () => context.push('/dashboard/admin/master'),
+                  title: 'Pengaturan Sistem',
+                  subtitle: 'Konfigurasi global aplikasi',
+                  icon: Icons.settings,
+                  onTap: () => context.push('/dashboard/super-admin/settings'),
                 ),
                 DashboardMenuCard(
-                  title: 'Pusat Bantuan',
-                  subtitle: 'Kelola FAQ & Artikel Bantuan',
-                  icon: Icons.help_outline,
-                  onTap: () => context.push('/dashboard/admin/pusat-bantuan'), // asumsikan rute ini ada
+                  title: 'Role Management',
+                  subtitle: 'Kelola hak akses pengguna',
+                  icon: Icons.admin_panel_settings,
+                  onTap: () => context.push('/dashboard/super-admin/roles'),
                 ),
                 DashboardMenuCard(
-                  title: 'Audit Logs',
-                  subtitle: 'Pantau aktivitas pengguna',
-                  icon: Icons.security,
-                  onTap: () => context.push('/dashboard/admin/audit-logs'), // asumsikan rute ini ada
+                  title: 'Backup & Logs',
+                  subtitle: 'Pengelolaan data cadangan',
+                  icon: Icons.backup,
+                  onTap: () => context.push('/dashboard/super-admin/backup'),
+                ),
+                DashboardMenuCard(
+                  title: 'API Integrations',
+                  subtitle: 'Sinkronisasi SIAKAD',
+                  icon: Icons.sync_alt_rounded,
+                  onTap: () => context.push('/dashboard/super-admin/api-integrations'),
+                ),
+                DashboardMenuCard(
+                  title: 'Bug Reports',
+                  subtitle: 'Tiket laporan user',
+                  icon: Icons.bug_report_rounded,
+                  onTap: () => context.push('/dashboard/super-admin/bug-reports'),
                 ),
               ],
             ),

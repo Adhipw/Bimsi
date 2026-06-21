@@ -6,6 +6,7 @@ import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../models/program_studi_model.dart';
 import '../models/kelas_model.dart';
+import '../../../shared/layouts/responsive_scaffold.dart';
 
 class MasterDataFormPage extends ConsumerStatefulWidget {
   final String type;
@@ -516,15 +517,8 @@ class _MasterDataFormPageState extends ConsumerState<MasterDataFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
-      appBar: AppBar(
-        title: Text(_isEdit ? 'Edit ${widget.type}' : 'Tambah ${widget.type}',
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-        backgroundColor: const Color(0xFF0056A6),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-      ),
+    return ResponsiveScaffold(
+      title: _isEdit ? 'Edit ${widget.type}' : 'Tambah ${widget.type}',
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(

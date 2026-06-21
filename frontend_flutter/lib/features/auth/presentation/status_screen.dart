@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -98,21 +98,21 @@ class StatusScreen extends ConsumerWidget {
     }
   }
 
-  String _dashboardForRole(UserRole? role) {
+  String _dashboardForRole(String? role) {
     switch (role) {
-      case UserRole.mahasiswa:
-        return RoutePaths.dashboardMahasiswa;
-      case UserRole.dosen:
-        return RoutePaths.dashboardDosen;
-      case UserRole.koordinator:
-        return RoutePaths.dashboardKoordinator;
-      case UserRole.admin:
-        return RoutePaths.dashboardAdmin;
-      case UserRole.superAdmin:
-        return RoutePaths.dashboardSuperAdmin;
-      case null:
-        return RoutePaths.unauthorized;
+      case 'mahasiswa':
+        return '/dashboard/mahasiswa';
+      case 'dosen':
+        return '/dashboard/dosen';
+      case 'koordinator':
+      case 'kaprodi':
+        return '/dashboard/kaprodi';
+      case 'admin':
+        return '/dashboard/admin';
+      case 'superAdmin':
+        return '/dashboard/super-admin';
+      default:
+        return '/dashboard';
     }
   }
 }
-

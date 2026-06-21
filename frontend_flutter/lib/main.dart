@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,9 +10,13 @@ void main() async {
   await dotenv.load(fileName: '.env');
 
   try {
-    await Firebase.initializeApp();
-    final fcmService = FirebaseMessagingService();
-    await fcmService.init();
+    try {
+      await Firebase.initializeApp();
+      final fcmService = FirebaseMessagingService();
+      await fcmService.init();
+    } catch (e) {
+      debugPrint('Firebase init failed (expected if options not set): $e');
+    }
   } catch (e) {
     print('Firebase init failed (maybe no config provided): $e');
   }

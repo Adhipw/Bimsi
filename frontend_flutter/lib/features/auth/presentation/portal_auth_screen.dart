@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,25 +22,28 @@ class PortalAuthScreen extends ConsumerWidget {
   final String subtitle;
   final String description;
   final PortalAccessMode mode;
-  final UserRole role;
+  final String role;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(authSessionControllerProvider.notifier);
     final colorScheme = Theme.of(context).colorScheme;
 
-    String roleLabel(UserRole value) {
+    String roleLabel(String value) {
       switch (value) {
-        case UserRole.mahasiswa:
+        case 'mahasiswa':
           return 'Mahasiswa';
-        case UserRole.dosen:
+        case 'dosen':
           return 'Dosen';
-        case UserRole.koordinator:
-          return 'Koordinator';
-        case UserRole.admin:
-          return 'Admin';
-        case UserRole.superAdmin:
+        case 'koordinator':
+        case 'kaprodi':
+          return 'Koordinator / Kaprodi';
+        case 'admin':
+          return 'Admin Akademik';
+        case 'superAdmin':
           return 'Super Admin';
+        default:
+          return value;
       }
     }
 
@@ -84,12 +87,12 @@ class PortalAuthScreen extends ConsumerWidget {
           FilledButton.icon(
             onPressed: () {
               controller.login(role: role, profileCompleted: true, requiresVerification: false);
-              context.go(_dashboardForRole(role));
+              context.go(_dashboardRouteForRole(role));
             },
             icon: const Icon(Icons.login),
             label: Text('Login Demo $roleLabel'),
           ),
-          if (role == UserRole.mahasiswa)
+          if (role == 'mahasiswa')
             OutlinedButton(
               onPressed: () {
                 controller.login(role: role, profileCompleted: false, requiresVerification: false);
@@ -123,18 +126,21 @@ class PortalAuthScreen extends ConsumerWidget {
     }
   }
 
-  String _dashboardForRole(UserRole role) {
+  String _dashboardRouteForRole(String role) {
     switch (role) {
-      case UserRole.mahasiswa:
+      case 'mahasiswa':
         return RoutePaths.dashboardMahasiswa;
-      case UserRole.dosen:
+      case 'dosen':
         return RoutePaths.dashboardDosen;
-      case UserRole.koordinator:
+      case 'koordinator':
+      case 'kaprodi':
         return RoutePaths.dashboardKoordinator;
-      case UserRole.admin:
+      case 'admin':
         return RoutePaths.dashboardAdmin;
-      case UserRole.superAdmin:
+      case 'superAdmin':
         return RoutePaths.dashboardSuperAdmin;
+      default:
+        return '/';
     }
   }
 }

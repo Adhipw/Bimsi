@@ -31,13 +31,15 @@ class AdminDashboardPage extends ConsumerWidget {
               style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            GridView.count(
-              crossAxisCount: crossAxisCount,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+            GridView(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 300,
+                mainAxisExtent: 120,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 2.5,
               children: const [
                 KpiGridCard(
                   title: 'Sidang Menunggu',
@@ -71,13 +73,15 @@ class AdminDashboardPage extends ConsumerWidget {
               style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            GridView.count(
-              crossAxisCount: crossAxisCount > 2 ? 3 : (crossAxisCount == 2 ? 2 : 1),
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
+            GridView(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 400,
+                mainAxisExtent: 120,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 3,
               children: [
                 DashboardMenuCard(
                   title: 'Kelola Data Master',
@@ -89,19 +93,37 @@ class AdminDashboardPage extends ConsumerWidget {
                   title: 'Plotting Sidang',
                   subtitle: 'Atur jadwal dan ruangan sidang',
                   icon: Icons.calendar_month,
-                  onTap: () => context.push('/dashboard/admin/sidang'),
+                  onTap: () => context.push('/admin/jadwal'),
                 ),
                 DashboardMenuCard(
                   title: 'Verifikasi Turnitin',
                   subtitle: 'Cek plagiarisme dokumen',
                   icon: Icons.verified,
-                  onTap: () => context.push('/dashboard/admin/turnitin'),
+                  onTap: () => context.push('/admin/turnitin'),
                 ),
                 DashboardMenuCard(
                   title: 'Repository Skripsi',
                   subtitle: 'Kelola publikasi skripsi mahasiswa',
                   icon: Icons.library_books,
-                  onTap: () => context.push('/dashboard/admin/repository'),
+                  onTap: () => context.push('/admin/repository'),
+                ),
+                DashboardMenuCard(
+                  title: 'Manajemen Kuota',
+                  subtitle: 'Batas kuota pembimbing',
+                  icon: Icons.group_work_rounded,
+                  onTap: () => context.push('/dashboard/admin/kuota-pembimbing'),
+                ),
+                DashboardMenuCard(
+                  title: 'Broadcast Pengumuman',
+                  subtitle: 'Kirim notifikasi massal',
+                  icon: Icons.campaign_rounded,
+                  onTap: () => context.push('/dashboard/admin/broadcast-pengumuman'),
+                ),
+                DashboardMenuCard(
+                  title: 'Penerbitan Surat Bebas',
+                  subtitle: 'Cetak surat bebas pustaka',
+                  icon: Icons.task_rounded,
+                  onTap: () => context.push('/dashboard/admin/penerbitan-surat'),
                 ),
               ],
             ),
